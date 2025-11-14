@@ -148,7 +148,7 @@ export async function scheduleTimerNotification(
     const date = new Date(timerEndMs);
     const notificationId = await Notifications.scheduleNotificationAsync({
       content: {
-        title: `⏰ Timer ${timerId} finished!`,
+        title: `⏰ Timer finished!`,
         body: "Your timer is up!",
         sound: true,
         data: { timerId },

@@ -93,6 +93,8 @@ export default function ThemedTimer(props: ThemedTimerProps) {
       {modalVisible && (
         <TimerModal
           key={id}
+          start={start}
+          onClose={() => setModalVisible(false)}
           visible={modalVisible}
           initialValue={duration}
           onSave={handleSave}

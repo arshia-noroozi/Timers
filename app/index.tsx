@@ -8,10 +8,16 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function RootIndex() {
   const router = useRouter();
-
   return (
     <FullScreenWrapper>
-      <View style={{flex:1,justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "row",
+        }}
+      >
         <View style={styles.container}>
           <Pressable
             style={({ pressed }) => [

@@ -19,45 +19,65 @@ export default function Timers() {
     {}
   );
 
+  const isWeb = Platform.OS === "web";
+
+  // Load notifications map (only on native)
   useEffect(() => {
+    if (isWeb) {
+      setNotifications({});
+      return;
+    }
+
+    let mounted = true;
     async function loadMap() {
       const map = await readNotificationsMap();
-      setNotifications(map);
+      if (mounted) setNotifications(map);
     }
     loadMap();
-  }, []);
+    return () => {
+      mounted = false;
+    };
+  }, [isWeb]);
 
+  // Request notification permissions (only on native)
   useEffect(() => {
+    if (isWeb) return;
     async function requestPerms() {
       await requestNotificationPermissions();
     }
     requestPerms();
-  }, []);
+  }, [isWeb]);
 
   // When timers finish loading (or change significantly), restore scheduled notifications.
-  // This reschedules notifications (safe-idempotent because we cancel existing ones first).
   useEffect(() => {
     if (loading) return;
-    // timers is expected to be an array of { id, start, duration }
-    restoreNotificationsForTimers(timers as any[]);
-    // refresh local state copy of notification map
-    (async () => {
-      const map = await readNotificationsMap();
-      setNotifications(map);
-    })();
-  }, [loading]);
+
+    if (!isWeb) {
+      // timers is expected to be an array of { id, start, duration }
+      restoreNotificationsForTimers(timers as any[]);
+      // refresh local state copy of notification map
+      (async () => {
+        const map = await readNotificationsMap();
+        setNotifications(map);
+      })();
+    } else {
+      // ensure notifications map is empty on web
+      setNotifications({});
+    }
+  }, [loading, isWeb, timers]);
 
   const handleResetTimer = async (id: string) => {
-    // cancel notification for this timer
-    await cancelTimerNotificationForTimer(id);
-    // update timer state
+    if (!isWeb) {
+      // cancel notification for this timer (native only)
+      await cancelTimerNotificationForTimer(id);
+      setNotifications((prev) => {
+        const copy = { ...prev };
+        delete copy[id];
+        return copy;
+      });
+    }
+    // update timer state (works on all platforms)
     resetTimer(id);
-    // update local map
-    setNotifications((prev) => {
-      const copy = { ...prev };
-      delete copy[id];
-      return copy;
-    });
   };
 
   const handleSetDuration = async (
@@ -65,20 +85,26 @@ export default function Timers() {
     newDuration: string,
     id: string
   ) => {
-    // cancel previous notification if exists
-    if (notifications[id]) {
-      await cancelTimerNotification(notifications[id]);
+    if (!isWeb) {
+      // cancel previous notification if exists (native only)
+      if (notifications[id]) {
+        await cancelTimerNotification(notifications[id]);
+      }
+
+      // schedule new notification (native only)
+      const notifId = await scheduleTimerNotification(
+        id,
+        newStart,
+        newDuration
+      );
+
+      // store the ID (native only)
+      if (notifId) {
+        setNotifications((prev) => ({ ...prev, [id]: notifId }));
+      }
     }
 
-    // schedule new notification
-    const notifId = await scheduleTimerNotification(id, newStart, newDuration);
-
-    // store the ID
-    if (notifId) {
-      setNotifications((prev) => ({ ...prev, [id]: notifId }));
-    }
-
-    // update timer in your hook
+    // update timer in your hook (all platforms)
     updateTimer(id, { start: newStart, duration: newDuration });
   };
 
@@ -86,41 +112,73 @@ export default function Timers() {
     return <FullScreenWrapper />;
   }
 
-  // **Web-specific return**
-  if (Platform.OS === "web") {
+  if (isWeb) {
+    // TODO: set these to your SVG's natural (designer) pixel size.
+    const INTRINSIC_WIDTH = 370; // <-- pick the map's natural width in px
+    const INTRINSIC_HEIGHT = 622; // <-- pick the map's natural height in px
+
     return (
-      <ScrollView
-        style={{ flex: 1, height: "100%" }}
-        contentContainerStyle={{
+      // outer page container (keeps background/padding)
+      <View
+        style={{
+          flex: 1,
+          height: "100%",
           backgroundColor: "#151718",
-          paddingVertical: 10,
-          alignItems: "center",
+          paddingVertical: 20,
         }}
       >
-        <View style={{ position: "relative", paddingHorizontal: 8 }}>
-          <OutsideFrame />
-          {timers
-            .filter((t) => (Number(t.id) ?? 0) > 26)
-            .map((t, i) => (
-              <ThemedTimer
-                key={t.id ?? i}
-                id={t.id}
-                duration={t.duration ?? "45:00"}
-                x={t.x ?? 0} // defensive
-                y={t.y ?? 0} // defensive
-                scale={t.scale}
-                start={t.start}
-                shape={t.shape}
-                resetTimer={handleResetTimer}
-                setTimer={(newStart: string, newDuration: string) =>
-                  handleSetDuration(newStart, newDuration, t.id)
-                }
-              />
-            ))}
+        {/* native browser scroller that handles both X and Y axes */}
+        <View
+          style={{
+            width: "100%",
+            // allow both horizontal and vertical scroll
+            overflowX: "auto",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+            touchAction: "pan-x pan-y",
+            // optional: limit height so scroller fits inside viewport minus chrome
+            maxHeight: "calc(100vh - 100px)",
+          }}
+        >
+          {/* inner content has fixed pixel dimensions so it can overflow */}
+          <View
+            style={{
+              position: "relative",
+              paddingHorizontal: 4,
+              width: INTRINSIC_WIDTH,
+              height: INTRINSIC_HEIGHT,
+              // center inside the outer scroller if the page is wider than content
+              marginLeft: "auto",
+              marginRight: "auto",
+            }}
+          >
+            {/* Render the SVG at its exact pixel size (no % scaling) */}
+            <OutsideFrame width={INTRINSIC_WIDTH} height={INTRINSIC_HEIGHT} />
+            {timers
+              .filter((t) => (Number(t.id) ?? 0) > 26)
+              .map((t, i) => (
+                <ThemedTimer
+                  key={t.id ?? i}
+                  id={t.id}
+                  duration={t.duration ?? "45:00"}
+                  x={t.x ?? 0} // defensive
+                  y={t.y ?? 0} // defensive
+                  scale={t.scale}
+                  start={t.start}
+                  shape={t.shape}
+                  resetTimer={handleResetTimer}
+                  setTimer={(newStart: string, newDuration: string) =>
+                    handleSetDuration(newStart, newDuration, t.id)
+                  }
+                />
+              ))}
+          </View>
         </View>
-      </ScrollView>
+      </View>
     );
   }
+
+  // Native (Android/iOS) return
   return (
     <ScrollView
       style={{ flex: 1 }}

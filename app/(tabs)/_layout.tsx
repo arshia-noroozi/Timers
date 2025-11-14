@@ -45,7 +45,7 @@ export default function TabLayout() {
 
       {/* filename should be lowercase: outside.tsx → name="outside" */}
       <Tabs.Screen
-        name="Outside"
+        name="outside"
         options={{
           title: "بیرون",
           tabBarIcon: ({ color }) => (

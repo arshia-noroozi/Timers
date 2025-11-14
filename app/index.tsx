@@ -35,7 +35,7 @@ export default function RootIndex() {
               styles.button,
               pressed && styles.buttonPressed,
             ]}
-            onPress={() => router.push("/(tabs)/Outside")}
+            onPress={() => router.push("/(tabs)/outside")}
           >
             <OutsideFrame width={120} height={180} />
             <Text style={styles.buttonText}>بیرون</Text>

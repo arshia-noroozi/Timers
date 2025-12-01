@@ -50,11 +50,11 @@ export async function requestPermissions() {
   }
 }
 // **use with caution**
-// const removeTimers = async () => {
-//   try {
-//     await AsyncStorage.removeItem("timers");
-//     console.log("Timers removed successfully!");
-//   } catch (error) {
-//     console.error("Error removing timers:", error);
-//   }
-// };
+export const removeTimers = async () => {
+  try {
+    await AsyncStorage.removeItem("timers");
+    console.log("Timers removed successfully!");
+  } catch (error) {
+    console.error("Error removing timers:", error);
+  }
+};

@@ -2,11 +2,14 @@
 import InsideFrame from "@/assets/images/inside-frame.svg";
 import OutsideFrame from "@/assets/images/outside-frame.svg";
 import FullScreenWrapper from "@/components/screen";
+import { removeTimers } from "@/utils/helperFunctions";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function RootIndex() {
+
+  removeTimers()
   const router = useRouter();
   return (
     <FullScreenWrapper>

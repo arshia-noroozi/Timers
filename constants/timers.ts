@@ -40,38 +40,44 @@ export const initialTimers: TimerType[] = [
   { id: "25", x: 205, y: 550, start: null, duration: "45:00", scale: 0.9 },
   { id: "26", x: 205, y: 600, start: null, duration: "45:00", scale: 0.9 },
 
+  // left
+  { id: "27", x: 12, y: 35, start: null, duration: "45:00", scale: 0.9 },
+  { id: "28", x: 12, y: 80, start: null, duration: "45:00", scale: 0.9 },
+  { id: "29", x: 12, y: 540, start: null, duration: "45:00", scale: 0.9 },
+  { id: "30", x: 12, y: 585, start: null, duration: "45:00", scale: 0.9 },
+
   // OUTSIDE ******************
 
   // top left
-  { id: "27", x: 15, y: 10, start: null, duration: "45:00", scale: 0.9 },
-  { id: "28", x: 15, y: 55, start: null, duration: "45:00", scale: 0.9 },
-  { id: "30", x: 15, y: 100, start: null, duration: "45:00", scale: 0.9 },
-  { id: "31", x: 15, y: 145, start: null, duration: "45:00", scale: 0.9 },
+  { id: "31", x: 15, y: 10, start: null, duration: "45:00", scale: 0.9 },
+  { id: "32", x: 15, y: 55, start: null, duration: "45:00", scale: 0.9 },
+  { id: "33", x: 15, y: 100, start: null, duration: "45:00", scale: 0.9 },
+  { id: "34", x: 15, y: 145, start: null, duration: "45:00", scale: 0.9 },
 
   // top right
-  { id: "32", x: 165, y: 10, start: null, duration: "45:00", scale: 0.9 },
-  { id: "33", x: 165, y: 55, start: null, duration: "45:00", scale: 0.9 },
-  { id: "34", x: 165, y: 100, start: null, duration: "45:00", scale: 0.9 },
-  { id: "35", x: 165, y: 145, start: null, duration: "45:00", scale: 0.9 },
-  { id: "36", x: 165, y: 190, start: null, duration: "45:00", scale: 0.9 },
+  { id: "35", x: 162, y: 10, start: null, duration: "45:00", scale: 0.9 },
+  { id: "36", x: 162, y: 55, start: null, duration: "45:00", scale: 0.9 },
+  { id: "37", x: 162, y: 100, start: null, duration: "45:00", scale: 0.9 },
+  { id: "38", x: 162, y: 145, start: null, duration: "45:00", scale: 0.9 },
+  { id: "39", x: 162, y: 190, start: null, duration: "45:00", scale: 0.9 },
 
   // under inside door
-  { id: "37", x: 210, y: 293, start: null, duration: "45:00", scale: 1 },
-  { id: "38", x: 260, y: 293, start: null, duration: "45:00", scale: 1 },
-  { id: "39", x: 325, y: 310, start: null, duration: "45:00", scale: 1 },
-  { id: "40", x: 315, y: 365, start: null, duration: "45:00", scale: 1 },
+  { id: "40", x: 210, y: 293, start: null, duration: "45:00", scale: 1 },
+  { id: "41", x: 260, y: 293, start: null, duration: "45:00", scale: 1 },
+  { id: "42", x: 325, y: 310, start: null, duration: "45:00", scale: 1 },
+  { id: "43", x: 315, y: 365, start: null, duration: "45:00", scale: 1 },
 
   // right bottom
-  { id: "41", x: 210, y: 365, start: null, duration: "45:00", scale: 1 },
-  { id: "42", x: 210, y: 440, start: null, duration: "45:00", scale: 1 },
-  { id: "43", x: 210, y: 515, start: null, duration: "45:00", scale: 1 },
-  { id: "44", x: 265, y: 440, start: null, duration: "45:00", scale: 1 },
-  { id: "45", x: 265, y: 515, start: null, duration: "45:00", scale: 1 },
+  { id: "44", x: 210, y: 365, start: null, duration: "45:00", scale: 1 },
+  { id: "45", x: 210, y: 440, start: null, duration: "45:00", scale: 1 },
+  { id: "46", x: 210, y: 515, start: null, duration: "45:00", scale: 1 },
+  { id: "47", x: 265, y: 440, start: null, duration: "45:00", scale: 1 },
+  { id: "48", x: 265, y: 515, start: null, duration: "45:00", scale: 1 },
 
   // top middle rects
   {
-    id: "47",
-    x: 90,
+    id: "49",
+    x: 87,
     y: 20,
     start: null,
     duration: "45:00",
@@ -79,8 +85,8 @@ export const initialTimers: TimerType[] = [
     shape: "rectangle",
   },
   {
-    id: "48",
-    x: 90,
+    id: "50",
+    x: 87,
     y: 75,
     start: null,
     duration: "45:00",
@@ -88,8 +94,8 @@ export const initialTimers: TimerType[] = [
     shape: "rectangle",
   },
   {
-    id: "49",
-    x: 90,
+    id: "51",
+    x: 87,
     y: 130,
     start: null,
     duration: "45:00",

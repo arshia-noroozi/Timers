@@ -149,7 +149,7 @@ export default function Timers() {
             <InsideFrame width={INTRINSIC_WIDTH} height={INTRINSIC_HEIGHT} />
 
             {timers
-              .filter((t) => (Number(t.id) ?? 0) <= 26)
+              .filter((t) => (Number(t.id) ?? 0) <= 30)
               .map((t, i) => (
                 <ThemedTimer
                   key={t.id ?? i}
